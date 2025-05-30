@@ -23,24 +23,29 @@ _start:
     mov [cociente], eax
     mov [residuo], edx
 
+    ; Mostrar mensaje: Cociente
     mov eax, 4
     mov ebx, 1
     mov ecx, msg_cociente
     mov edx, msg_cociente_len
     int 0x80
 
+    ; Mostrar valor del cociente
     mov eax, [cociente]
     call imprimir_numero
 
+    ; Mostrar mensaje: Residuo
     mov eax, 4
     mov ebx, 1
     mov ecx, msg_residuo
     mov edx, msg_residuo_len
     int 0x80
 
+    ; Mostrar valor del residuo
     mov eax, [residuo]
     call imprimir_numero
 
+    ; Salida del programa
     mov eax, 1
     mov ebx, 0
     int 0x80
@@ -59,4 +64,10 @@ imprimir_numero:
     test eax, eax
     jnz .convertir
 
-    mov eax, b
+    mov eax, 4          ; syscall write
+    mov ecx, ebx        ; puntero al número convertido
+    mov edx, buffer + 10
+    sub edx, ebx        ; longitud del número
+    mov ebx, 1          ; stdout
+    int 0x80
+    ret
